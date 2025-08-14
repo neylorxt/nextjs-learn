@@ -7,6 +7,7 @@ import MyCarousel from "./_components/Carousel";
 import CardComponent from "./_components/Card";
 import { useEffect, useState } from "react";
 import { Game } from "./data/data";
+import Footer from "./_components/Footer";
 
 export default function HomePage() {
   const [data, setData] = useState<Game[] | null>(null)
@@ -77,6 +78,8 @@ export default function HomePage() {
 
         </Flex>
       </ScrollArea>
+
+      <Footer />
 
     </>
   );
