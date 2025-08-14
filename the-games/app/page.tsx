@@ -6,22 +6,25 @@ import Header from "./_components/Header";
 import MyCarousel from "./_components/Carousel";
 import CardComponent from "./_components/Card";
 import { useEffect, useState } from "react";
+import { Game } from "./data/data";
 
 export default function HomePage() {
-  const [data, setData] = useState(null)
+  const [data, setData] = useState<Game[] | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('/api/')
+        const response = await fetch('/api/games');
 
         if (!response.ok) {
           throw new Error('Erreur réseau')
         }
         const result = await response.json()
+
         setData(result)
+
       } catch (err) {
         setError('Une erreur est survenue')
       } finally {
@@ -34,9 +37,8 @@ export default function HomePage() {
 
   if (loading) { return <div>Chargement...</div> }
   if (error) { return <div>Erreur: {error}</div> }
-
-  console.log(data)
-
+  if (!data) { return <div>Aucune donnée disponible</div> }
+  if (data.length === 0) { return <div>Aucun jeu trouvé</div> }
 
   return (
     <>
@@ -53,9 +55,9 @@ export default function HomePage() {
         direction="row"
         wrap="wrap"
       >
-        <CardComponent />
-        <CardComponent />
-        <CardComponent />
+        {data.slice((data.length - 3), data.length).map((game, index) => (
+          <CardComponent key={index} game={game} />
+        ))}
 
       </Flex>
 
@@ -69,21 +71,9 @@ export default function HomePage() {
           direction="row"
           wrap="wrap"
         >
-          <CardComponent />
-          <CardComponent />
-          <CardComponent />
-
-          <CardComponent />
-          <CardComponent />
-          <CardComponent />
-
-          <CardComponent />
-          <CardComponent />
-          <CardComponent />
-
-          <CardComponent />
-          <CardComponent />
-          <CardComponent />
+          {data.map((game, index) => (
+            <CardComponent key={index} game={game} />
+          ))}
 
         </Flex>
       </ScrollArea>

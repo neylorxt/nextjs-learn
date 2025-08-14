@@ -1,6 +1,20 @@
-import { Card, Image, Text, Badge, Button, Group } from '@mantine/core';
+"use client"
 
-export default function CardComponent() {
+import { Card, Image, Text, Badge, Group } from '@mantine/core';
+import { Game } from '../data/data';
+import CardPlaceholder from './CardPlaceholder';
+
+type GameProps = {
+    game: Game;
+}
+
+const CardComponent: React.FC<GameProps> = ({ game }: GameProps) => {
+
+    if (!game) {
+        return <CardPlaceholder />; // Handle case where game data is not provided
+    }
+
+
     return (
         <Card
             shadow="sm"
@@ -9,42 +23,40 @@ export default function CardComponent() {
             withBorder
             w={400}
             component="a"
-            href="http://localhost:3000/_next"
+            href={game.freetogame_profile_url}
             target="_blank"
             rel="noopener noreferrer"
         >
             <Card.Section>
                 <Image
-                    src="http://localhost:3000/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ffar_cry.a61dae0b.jpg&w=3840&q=75"
+                    src={game.thumbnail}
                     height={200}
-                    alt="Far Cry"
+                    alt={game.title}
                     fit="cover"
                 />
             </Card.Section>
 
             <Group justify="space-between" mt="md" mb="xs">
-                <Text fw={500} lineClamp={1}>Far Cry</Text>
+                <Text fw={500} lineClamp={1}>{game.title}</Text>
                 <Badge color="blue" variant="light">
-                    Action
+                    {game.genre}
                 </Badge>
             </Group>
 
             <Text size="sm" c="dimmed" lineClamp={3} mb="md">
-                Far Cry is an action-adventure game developed by Ubisoft.
+                {game.short_description}
             </Text>
 
             <Group justify="space-between" mb="md">
                 <Text size="xs" c="dimmed">
-                    Plateforme: PC
+                    Plateforme: {game.platform}
                 </Text>
                 <Text size="xs" c="dimmed">
-                    Ubisoft
+                    {game.developer}
                 </Text>
             </Group>
-
-            <Button color="blue" fullWidth mt="auto" radius="md">
-                Voir plus
-            </Button>
         </Card>
     );
 }
+
+export default CardComponent;
